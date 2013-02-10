@@ -1,6 +1,5 @@
 package JUnitTests;
 
-import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
 import org.junit.Test;
