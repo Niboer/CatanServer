@@ -1,65 +1,46 @@
 package Ressourcen;
-/**
- * Diese Klasse bildet die Verschiedenen Ressourcen des Spiels ab.
- * 
- * @author bejo
- *
- */
 
-public enum Ressourcen {
+public class Ressourcen {
+	int[] menge = new int[4];
 
-	Holz(0), Lehm(0), Getreide(0), Schaf(0), Erz(0);
-
-	int menge;
-
-	/**
-	 * Konstruktor mit Startwert 0.
-	 * 
-	 */
-	Ressourcen(int menge) {
-		this.menge = menge;
+	public int getRess(int RessTyp) {
+		try {
+			return menge[RessTyp];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return 0;
+		}
 	}
 
-	/**
-	 * Getter fuer Menge.
-	 * @return aktuelle Menge
-	 */
-	public int getMenge() {
-		return menge;
+	public boolean setRess(int neuer_wert, int RessTyp) {
+		if (neuer_wert >= 0) {
+			try {
+				menge[RessTyp] = neuer_wert;
+			} catch (ArrayIndexOutOfBoundsException e) {
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
-	/**
-	 * Setter fuer Menge
-	 * @param menge neue Menge
-	 * @return True bei erfolgreicher Aenderung.
-	 */
-	public boolean setMenge(int menge) {
-		if (menge < 0) {
-			return false;
-		} else {
-			this.menge = menge;
-			return true;
+	public boolean veraendernRess(int unterschied, int RessTyp)
+	{
+		try
+		{
+			if (menge[RessTyp]-unterschied <= 0)
+			{
+				return false;
+			}
+			else
+			{
+				menge[RessTyp]-=unterschied;
+				return true;
+			}
 		}
-
-	}
-
-	/**
-	 * Verändert die Menge relativ zur aktuellen Menge
-	 * Positive Werte: hinzufügen der Ressource
-	 * Negative Werte: abziehen der Ressource
-	 * Der neue Wert darf dabei nicht unter 0 fallen.
-	 * @param menge relative neue Menge
-	 * @return True bei erfolgreicher Aenderung.
-	 */
-	public boolean verändern(int menge) {
-		if(this.menge + menge < 0){
+		catch (ArrayIndexOutOfBoundsException e)
+		{
 			return false;
-		} else {
-			this.menge += menge;
-			return true;
 		}
-		
-
 	}
-
 }
