@@ -81,7 +81,11 @@ public class Generator {
 	 * @return LandTyp der entweder berg, wiese, feld oder grube ist.
 	 */
 	private LandTyp getRndTyp() {
-		int new_Typ = (int) (Math.random() * 4 + 1);
+		int max_Zahl = 4;
+		if (!wueste_verwendet) {
+			max_Zahl++;
+		}
+		int new_Typ = (int) (Math.random() * max_Zahl + 1);
 
 		switch (new_Typ) {
 		case 1:
@@ -92,6 +96,9 @@ public class Generator {
 			return LandTyp.FELD;
 		case 4:
 			return LandTyp.GRUBE;
+		case 5:
+			wueste_verwendet = true;
+			return LandTyp.WUESTE;
 		default:
 			return LandTyp.LEER;
 		}
