@@ -16,11 +16,10 @@ public class JTestGeneratorgetRndWuerfelzahl {
 			neue_Zahl = worldgen.TestgetRndWuerfelzahl();
 
 			if (neue_Zahl <= 1 || neue_Zahl >= 13) {
-				System.out.println("Durchlauf: " + i + " Ausgabe: " + neue_Zahl);
+				System.out
+						.println("Durchlauf: " + i + " Ausgabe: " + neue_Zahl);
 				assertTrue(false);
 			}
-			// System.out.println(""+ausgabe);
 		}
-		// assertTrue(fehler);
 	}
 }
