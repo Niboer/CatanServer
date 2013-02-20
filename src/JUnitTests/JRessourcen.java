@@ -55,6 +55,18 @@ public class JRessourcen {
 		{
 			assertTrue(false);
 		}
+		if (ob1.veraendernRess(-2, RessTyp.WEIZEN.getStelle()))
+		{
+			assertTrue(false);
+		}
+		if (!ob1.veraendernRess(-1, RessTyp.WEIZEN.getStelle()))
+		{
+			assertTrue(false);
+		}
+		if (ob1.veraendernRess(-1, RessTyp.WEIZEN.getStelle()))
+		{
+			assertTrue(false);
+		}
 	}
 
 }

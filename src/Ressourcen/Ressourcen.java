@@ -32,10 +32,10 @@ public class Ressourcen {
 
 	public boolean veraendernRess(int unterschied, int RessTyp) {
 		try {
-			if (menge[RessTyp] - unterschied <= 0) {
+			if (menge[RessTyp] + unterschied < 0) {
 				return false;
 			} else {
-				menge[RessTyp] -= unterschied;
+				menge[RessTyp] += unterschied;
 				return true;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
