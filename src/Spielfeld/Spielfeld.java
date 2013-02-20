@@ -9,7 +9,7 @@ public class Spielfeld {
 	Generator worldgen = new Generator();
 	Feld[] karten;
 	Feld_Ecke[] ecken;
-	Kante[] kanten;
+	Feld_Kante[] kanten;
 	int spielfeldGroesse;
 	int[][] wuerfelzahlen_zu_ecke = new int[13][2];
 
