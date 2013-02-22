@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Diese Klasse enthält die Methoden zur Erstellung eines Spielfeldes.
+ * Diese Klasse enthaelt die Methoden zur Erstellung eines Spielfeldes.
  * 
  * @author frankero
  * 
@@ -19,32 +19,31 @@ public class Generator {
 	int anzahl_felder;
 
 	/**
-	 * Diese Methode generiert das Spielfeld für die GUI und die Erzeugung der
+	 * Diese Methode generiert das Spielfeld fuer die GUI und die Erzeugung der
 	 * Ecken und Kanten
 	 * 
-	 * @param groeße
-	 *            Bestimmt die Größe der Generierten Karte, dabei wird der
+	 * @param groesse
+	 *            Bestimmt die Groesse der Generierten Karte, dabei wird der
 	 *            Radius angegeben ohne Mittelpunkt und Wasserrand.
-	 * @return Es wird ein Array aus Hexahon zurück gegeben
+	 * @return Es wird ein Array aus Hexahon zurueck gegeben
 	 */
-	public Feld[] genHexagonSpielfeld(int groeße) {
+	public Feld[] genHexagonSpielfeld(int groesse) {
 		int kartenGesamt = 1;
 		int kartenGesamtoW = 1;
-		int anzahlRunden = groeße + 1;
+		int anzahlRinge = groesse + 1;
 
 		List<Feld> rueckgabe;
 
-		for (int rundenNr = 1; rundenNr <= anzahlRunden; rundenNr++) {
-			kartenGesamt += rundenNr * 6;
-			if (rundenNr != anzahlRunden) {
-				kartenGesamtoW += rundenNr * 6;
+		for (int ringNr = 1; ringNr <= anzahlRinge; ringNr++) {
+			kartenGesamt += ringNr * 6;
+			if (ringNr != anzahlRinge) {
+				kartenGesamtoW += ringNr * 6;
 			}
 		}
 
 		rueckgabe = new ArrayList<Feld>(kartenGesamt);
-		rueckgabe.add(new Feld(LandTyp.WUESTE, 0));
 
-		for (int karteNr = 1; karteNr < kartenGesamtoW; karteNr++) {
+		for (int karteNr = 0; karteNr < kartenGesamtoW; karteNr++) {
 			rueckgabe.add(new Feld(getRndTyp(), getRndWuerfelzahl()));
 		}
 		for (int karteNr = kartenGesamtoW; karteNr < kartenGesamt; karteNr++) {
@@ -56,9 +55,9 @@ public class Generator {
 		return (Feld[]) rueckgabe.toArray(new Feld[0]);
 	} // Ende genHexagonSpielfeld
 
-	public Feld_Ecke[] genEckenSpielfeld(Feld[] vorlage, int groeße) {
+	public Feld_Ecke[] genEckenSpielfeld(Feld[] vorlage, int groesse) {
 		List<Feld_Ecke> rueckgabe = new ArrayList<Feld_Ecke>(23);
-		for (int rundenNr = 1; rundenNr <= groeße + 1; rundenNr++) {
+		for (int rundenNr = 1; rundenNr <= groesse + 1; rundenNr++) {
 			rueckgabe.add(new Feld_Ecke());
 		}
 
@@ -67,16 +66,16 @@ public class Generator {
 	}
 
 	/**
-	 * Es wird eine Zufällige Zahl zwischen 2 und 12 generiert
+	 * Es wird eine Zufaellige Zahl zwischen 2 und 12 generiert
 	 * 
-	 * @return Zahl zwischen 2 und 12 wird zurück gegeben
+	 * @return Zahl zwischen 2 und 12 wird zurueck gegeben
 	 */
 	private int getRndWuerfelzahl() {
 		return (int) (Math.random() * 11 + 2);
 	}
 
 	/**
-	 * Es wird ein zufälliger Landschaftstyp zurückgegeben
+	 * Es wird ein zufaelliger Landschaftstyp zurueckgegeben
 	 * 
 	 * @return LandTyp der entweder berg, wiese, feld oder grube ist.
 	 */
