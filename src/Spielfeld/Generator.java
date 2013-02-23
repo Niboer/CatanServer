@@ -12,11 +12,13 @@ import java.util.List;
 public class Generator {
 	int last_kartenGesamt;
 	int last_kartenGesamtoW;
-	boolean wueste_verwendet;
+	int last_groesse;
 	int anzahl_berge;
 	int anzahl_gruben;
 	int anzahl_wiesen;
 	int anzahl_felder;
+	boolean wueste_verwendet;
+	boolean genhex;
 
 	/**
 	 * Diese Methode generiert das Spielfeld fuer die GUI und die Erzeugung der
@@ -28,6 +30,7 @@ public class Generator {
 	 * @return Es wird ein Array aus Hexahon zurueck gegeben
 	 */
 	public Feld[] genHexagonSpielfeld(int groesse) {
+
 		int kartenGesamt = 1;
 		int kartenGesamtoW = 1;
 		int anzahlRinge = groesse + 1;
@@ -52,17 +55,155 @@ public class Generator {
 
 		last_kartenGesamt = kartenGesamt;
 		last_kartenGesamtoW = kartenGesamtoW;
+		last_groesse = groesse;
+		genhex = true;
 		return (Feld[]) rueckgabe.toArray(new Feld[0]);
 	} // Ende genHexagonSpielfeld
 
-	public Feld_Ecke[] genEckenSpielfeld(Feld[] vorlage, int groesse) {
-		List<Feld_Ecke> rueckgabe = new ArrayList<Feld_Ecke>(23);
-		for (int rundenNr = 1; rundenNr <= groesse + 1; rundenNr++) {
-			rueckgabe.add(new Feld_Ecke());
-		}
+	/**
+	 * 
+	 * @param vorlage
+	 * @param groesse
+	 * @return
+	 */
+	public Feld_Ecke[] genEckenSpielfeld(Feld[] vorlage) {
+		List<Feld_Ecke> rueckgabe;
+		Feld_Ecke tempEcke;
+		LandTyp[] tempTyp = new LandTyp[3];
+		int eckenNr = 0;
+		int seitenzaehler = 1;
+		int temp01 = 1;
+		int temp02 = 0;
+		int eckeninRunde = 0;
+		int[] feldNr = new int[3];
+		int[] tempTyp_wuerfelzahl = new int[3];
+		boolean letzterPunktinrunde = false;
+		boolean vorletzterPunktinrunde = false;
 
-		// rueckgabe.trimToSize();
+		if (genhex) {
+			rueckgabe = new ArrayList<Feld_Ecke>(ermittleeckenzahl());
+
+			for (int rundenNr = 1; rundenNr <= last_groesse + 1; rundenNr++) {
+				letzterPunktinrunde = false;
+				eckeninRunde = ermittleeckenzahl_aktuelleRunde(rundenNr);
+
+				for (int i = 0; i < eckeninRunde; i++) {
+					rueckgabe.add(new Feld_Ecke());
+					tempEcke = rueckgabe.get(eckenNr);
+
+					if (i == eckeninRunde - 1) {
+						vorletzterPunktinrunde = false;
+						letzterPunktinrunde = true;
+					} else if (i == eckeninRunde - 2) {
+						vorletzterPunktinrunde = true;
+					}
+
+					if (temp01 == 2 + 2 * (rundenNr - 1)) {
+						temp01 = 1;
+						seitenzaehler++;
+					}
+					if (temp01 % 2 == 1 && temp01 != 1) {
+						temp02++;
+					}
+
+					if (letzterPunktinrunde) {
+						feldNr[0] = 0;
+						feldNr[1] = 0;
+						feldNr[2] = 0;
+
+						for (int j = 0; j <= rundenNr - 2; j++) {
+							feldNr[0] += 6 * j;
+						}
+						if (rundenNr != 1) {
+							feldNr[0]++;
+						}
+						for (int j = 0; j <= rundenNr; j++) {
+							feldNr[1] += 6 * j;
+						}
+						for (int j = 0; j <= rundenNr - 1; j++) {
+							feldNr[2] += 6 * j;
+						}
+						feldNr[2]++;
+
+					} else if (vorletzterPunktinrunde && rundenNr != 1) {
+						feldNr[0] = 0;
+						feldNr[1] = 0;
+						feldNr[2] = 0;
+
+						for (int j = 0; j <= rundenNr - 2; j++) {
+							feldNr[0] += 6 * j;
+						}
+						feldNr[0]++;
+						for (int j = 0; j <= rundenNr - 1; j++) {
+							feldNr[1] += 6 * j;
+						}
+						for (int j = 0; j <= rundenNr; j++) {
+							feldNr[2] += 6 * j;
+						}
+
+					} else {
+						feldNr[0] = temp02;
+						feldNr[1] = feldNr[0]
+								+ ((((int) Math.pow(-1, temp01) - 1) / -2)
+										* seitenzaehler + ((((int) Math.pow(-1,
+										temp01) + 1) / 2)));
+						feldNr[2] = feldNr[1]
+								+ ((((int) Math.pow(-1, temp01) + 1) / 2)
+										* seitenzaehler + ((((int) Math.pow(-1,
+										temp01) - 1) / -2)));
+					}
+
+					System.out.print("Runde: " + rundenNr + "; EckenNr: "
+							+ eckenNr + "; Seitenzaehler: " + seitenzaehler
+							+ "; temp: " + temp01 + "; Feld: " + feldNr[0]
+							+ " " + feldNr[1] + " " + feldNr[2]);
+
+					if (vorletzterPunktinrunde) {
+						System.out.println("; v");
+					} else if (letzterPunktinrunde) {
+						System.out.println("; l");
+					} else {
+						System.out.println("");
+					}
+
+					for (int j = 0; j < 3; j++) {
+						tempTyp[j] = vorlage[feldNr[j]].getTyp();
+						tempTyp_wuerfelzahl[j] = vorlage[feldNr[j]]
+								.getWuerfelzahl();
+					}
+
+					tempEcke.setTyp(tempTyp);
+					tempEcke.setTyp_wuerfelzahl(tempTyp_wuerfelzahl);
+					eckenNr++;
+					temp01++;
+				}
+				temp01 = 1;
+
+				if (rundenNr == 1) {
+					temp02++;
+				} else {
+					seitenzaehler++;
+				}
+			}
+
+		} else {
+			rueckgabe = new ArrayList<Feld_Ecke>(1);
+		}
 		return (Feld_Ecke[]) rueckgabe.toArray(new Feld_Ecke[0]);
+	}
+
+	public int ermittleeckenzahl() {
+		int anzahlRunden = last_groesse + 1;
+		return (anzahlRunden * anzahlRunden * 6) - 1;
+	}
+
+	public int ermittleeckenzahl(int rundenAnzahl) {
+		return (rundenAnzahl * rundenAnzahl * 6) - 1;
+	}
+
+	public int ermittleeckenzahl_aktuelleRunde(int aktuelleRunde) {
+		return ((int) Math.pow(aktuelleRunde, 2) * 6)
+				- ((int) Math.pow(aktuelleRunde - 1, 2) * 6);
 	}
 
 	/**
@@ -103,24 +244,39 @@ public class Generator {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public LandTyp TestgetRndTyp() {
 		return getRndTyp();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int TestgetRndWuerfelzahl() {
 		return getRndWuerfelzahl();
 	}
 
+	/**
+	 * 
+	 */
 	public void resetGenerator() {
 		last_kartenGesamt = 0;
 		last_kartenGesamtoW = 0;
 		wueste_verwendet = false;
+		genhex = false;
 		anzahl_berge = 0;
 		anzahl_gruben = 0;
 		anzahl_wiesen = 0;
 		anzahl_felder = 0;
 	}
 
+	/**
+	 * 
+	 */
 	public Generator() {
 		resetGenerator();
 	}
