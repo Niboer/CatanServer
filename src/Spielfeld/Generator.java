@@ -72,8 +72,8 @@ public class Generator {
 		LandTyp[] tempTyp = new LandTyp[3];
 		int eckenNr = 0;
 		int seitenzaehler = 1;
-		int temp01 = 1;
-		int temp02 = 0;
+		int seitenposition = 1;
+		int feld0_hilfe = 0;
 		int eckeninRunde = 0;
 		int[] feldNr = new int[3];
 		int[] tempTyp_wuerfelzahl = new int[3];
@@ -98,12 +98,12 @@ public class Generator {
 						vorletzterPunktinrunde = true;
 					}
 
-					if (temp01 == 2 + 2 * (rundenNr - 1)) {
-						temp01 = 1;
+					if (seitenposition == 2 + 2 * (rundenNr - 1)) {
+						seitenposition = 1;
 						seitenzaehler++;
 					}
-					if (temp01 % 2 == 1 && temp01 != 1) {
-						temp02++;
+					if (seitenposition % 2 == 1 && seitenposition != 1) {
+						feld0_hilfe++;
 					}
 
 					if (letzterPunktinrunde) {
@@ -142,22 +142,23 @@ public class Generator {
 						}
 
 					} else {
-						feldNr[0] = temp02;
+						feldNr[0] = feld0_hilfe;
 						feldNr[1] = feldNr[0]
-								+ ((((int) Math.pow(-1, temp01) - 1) / -2)
+								+ ((((int) Math.pow(-1, seitenposition) - 1) / -2)
 										* seitenzaehler + ((((int) Math.pow(-1,
-										temp01) + 1) / 2)));
+										seitenposition) + 1) / 2)));
 						feldNr[2] = feldNr[1]
-								+ ((((int) Math.pow(-1, temp01) + 1) / 2)
+								+ ((((int) Math.pow(-1, seitenposition) + 1) / 2)
 										* seitenzaehler + ((((int) Math.pow(-1,
-										temp01) - 1) / -2)));
+										seitenposition) - 1) / -2)));
 					}
 
+					/*// DEBUG-Info
 					System.out.print("Runde: " + rundenNr + "; EckenNr: "
 							+ eckenNr + "; Seitenzaehler: " + seitenzaehler
 							+ "; temp: " + temp01 + "; Feld: " + feldNr[0]
 							+ " " + feldNr[1] + " " + feldNr[2]);
-
+				 	*/
 					if (vorletzterPunktinrunde) {
 						System.out.println("; v");
 					} else if (letzterPunktinrunde) {
@@ -175,12 +176,12 @@ public class Generator {
 					tempEcke.setTyp(tempTyp);
 					tempEcke.setTyp_wuerfelzahl(tempTyp_wuerfelzahl);
 					eckenNr++;
-					temp01++;
+					seitenposition++;
 				}
-				temp01 = 1;
+				seitenposition = 1;
 
 				if (rundenNr == 1) {
-					temp02++;
+					feld0_hilfe++;
 				} else {
 					seitenzaehler++;
 				}
